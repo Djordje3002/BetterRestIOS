@@ -4,18 +4,11 @@ import SwiftUI
 struct ContentView: View {
     @State private var sleepAmount = SleepPreferences.defaultSleepHours
     @State private var coffeeAmount = SleepPreferences.defaultCoffeeCups
-    @State private var wakeUp = defaultWakeTime
+    @State private var wakeUp = BedtimeSchedule.defaultWakeTime()
     
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     @State private var showingAlert = false
-    
-    static var defaultWakeTime: Date {
-        var components = DateComponents()
-        components.hour = SleepPreferences.defaultWakeHour
-        components.minute = 0
-        return Calendar.current.date(from: components) ?? .now
-    }
     
     var body: some View {
         NavigationStack {
