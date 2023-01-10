@@ -58,7 +58,7 @@ struct ContentView: View {
             
             let prediction = try model.prediction(wake: wakeSeconds, estimatedSleep: sleepAmount, coffee: Double(coffeeAmount))
 
-            let sleepTime = wakeUp - prediction.actualSleep
+            let sleepTime = try BedtimeSchedule.bedtime(wakeUp: wakeUp, sleepDuration: prediction.actualSleep)
             
             alertTitle = "Your ideal bedtime is…"
             alertMessage = sleepTime.formatted(date: .omitted, time: .shortened)
