@@ -1,8 +1,15 @@
 import Foundation
 
 enum BedtimeSchedule {
+    enum CalculationError: Error {
+        case invalidPrediction
+    }
+
     static func bedtime(wakeUp: Date, sleepDuration: TimeInterval) throws -> Date {
-        wakeUp.addingTimeInterval(-sleepDuration)
+        guard sleepDuration.isFinite, sleepDuration > 0, sleepDuration <= 86_400 else {
+            throw CalculationError.invalidPrediction
+        }
+        return wakeUp.addingTimeInterval(-sleepDuration)
     }
 
     static func wakeSeconds(for date: Date, calendar: Calendar = .current) -> Double {
