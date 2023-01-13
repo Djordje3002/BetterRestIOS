@@ -1,7 +1,7 @@
-import CoreML
 import SwiftUI
 
 struct ContentView: View {
+    @State private var calculator = BedtimeCalculator()
     @State private var sleepAmount = SleepPreferences.defaultSleepHours
     @State private var coffeeAmount = SleepPreferences.defaultCoffeeCups
     @State private var wakeUp = BedtimeSchedule.defaultWakeTime()
@@ -51,15 +51,12 @@ struct ContentView: View {
     
     func calculateBedtime() {
         do {
-            let config = MLModelConfiguration()
-            let model = try SleepCalculator(configuration: config)
+            let sleepTime = try calculator.bedtime(
+                wakeUp: wakeUp,
+                sleepHours: sleepAmount,
+                coffeeCups: coffeeAmount
+            )
 
-            let wakeSeconds = BedtimeSchedule.wakeSeconds(for: wakeUp)
-            
-            let prediction = try model.prediction(wake: wakeSeconds, estimatedSleep: sleepAmount, coffee: Double(coffeeAmount))
-
-            let sleepTime = try BedtimeSchedule.bedtime(wakeUp: wakeUp, sleepDuration: prediction.actualSleep)
-            
             alertTitle = "Your ideal bedtime is…"
             alertMessage = sleepTime.formatted(date: .omitted, time: .shortened)
             
