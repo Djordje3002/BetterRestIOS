@@ -14,8 +14,9 @@ struct ContentView: View {
         NavigationStack {
             Form {
                 Section("When do you want to wake up?") {
-                    DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
+                    DatePicker("Wake-up time", selection: $wakeUp, displayedComponents: .hourAndMinute)
                         .labelsHidden()
+                        .accessibilityLabel("Wake-up time")
                 }
 
                 Section("Desired amount of sleep") {
