@@ -17,20 +17,24 @@ struct ContentView: View {
                     DatePicker("Wake-up time", selection: $wakeUp, displayedComponents: .hourAndMinute)
                         .labelsHidden()
                         .accessibilityLabel("Wake-up time")
+                        .accessibilityIdentifier("wakeUpPicker")
                 }
 
                 Section("Desired amount of sleep") {
                     Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: SleepPreferences.sleepHoursRange, step: SleepPreferences.sleepStep)
+                        .accessibilityIdentifier("sleepAmountStepper")
                 }
                 
                 Section("Daily coffee intake") {
                     Stepper(coffeeAmount == 1 ? "\(coffeeAmount) cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: SleepPreferences.coffeeCupsRange)
+                        .accessibilityIdentifier("coffeeAmountStepper")
                 }
 
             }
             .navigationTitle("BetterRest")
             .toolbar {
                 Button("Calculate", action: calculateBedtime)
+                    .accessibilityIdentifier("calculateBedtimeButton")
             }
             .alert(alertTitle, isPresented: $showingAlert) {
                 Button("OK") {}
