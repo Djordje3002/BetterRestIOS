@@ -23,11 +23,15 @@ struct ContentView: View {
                 Section("Desired amount of sleep") {
                     Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: SleepPreferences.sleepHoursRange, step: SleepPreferences.sleepStep)
                         .accessibilityIdentifier("sleepAmountStepper")
+                        .accessibilityLabel("Desired sleep")
+                        .accessibilityValue("\(sleepAmount.formatted()) hours")
                 }
                 
                 Section("Daily coffee intake") {
                     Stepper(coffeeAmount == 1 ? "\(coffeeAmount) cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: SleepPreferences.coffeeCupsRange)
                         .accessibilityIdentifier("coffeeAmountStepper")
+                        .accessibilityLabel("Daily coffee intake")
+                        .accessibilityValue(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups")
                 }
 
             }
