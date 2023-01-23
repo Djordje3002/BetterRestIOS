@@ -39,6 +39,7 @@ struct ContentView: View {
             .toolbar {
                 Button("Calculate", action: calculateBedtime)
                     .accessibilityIdentifier("calculateBedtimeButton")
+                    .accessibilityHint("Estimates bedtime using your wake-up time, sleep, and coffee preferences")
             }
             .alert(alertTitle, isPresented: $showingAlert) {
                 Button("OK") {}
