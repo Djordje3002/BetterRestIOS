@@ -59,7 +59,7 @@ struct ContentView: View {
             )
 
             alertTitle = "Your ideal bedtime is…"
-            alertMessage = sleepTime.formatted(date: .omitted, time: .shortened)
+            alertMessage = sleepTime.formatted(date: .abbreviated, time: .shortened)
             
         } catch BedtimeSchedule.CalculationError.invalidPrediction {
             alertTitle = "Unable to estimate bedtime"
