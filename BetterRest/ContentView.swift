@@ -27,11 +27,16 @@ struct ContentView: View {
                         .accessibilityValue("\(sleepAmount.formatted()) hours")
                 }
                 
-                Section("Daily coffee intake") {
+                Section {
+
                     Stepper(coffeeAmount == 1 ? "\(coffeeAmount) cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: SleepPreferences.coffeeCupsRange)
                         .accessibilityIdentifier("coffeeAmountStepper")
                         .accessibilityLabel("Daily coffee intake")
                         .accessibilityValue(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups")
+                } header: {
+                    Text("Daily coffee intake")
+                } footer: {
+                    Text("An educational estimate based on your inputs. The calculation runs on your device.")
                 }
 
             }
