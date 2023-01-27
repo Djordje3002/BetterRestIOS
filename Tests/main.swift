@@ -21,4 +21,21 @@ expect(previousYearBedtime == date(2022, 12, 31, 23), "Bedtime crosses the year 
 let sameDayBedtime = try BedtimeSchedule.bedtime(wakeUp: date(2023, 1, 1, 10), sleepDuration: 8 * 3_600)
 expect(sameDayBedtime == date(2023, 1, 1, 2), "Same-day subtraction is correct")
 
+for invalid: Double in [0, -1, .nan, .infinity, -.infinity, 86_401] {
+    do {
+        _ = try BedtimeSchedule.bedtime(wakeUp: date(2023, 1, 1, 7), sleepDuration: invalid)
+        preconditionFailure("Invalid duration must fail: \(invalid)")
+    } catch BedtimeSchedule.CalculationError.invalidPrediction {
+        checks += 1
+    }
+}
+let upperLimit = try BedtimeSchedule.bedtime(wakeUp: date(2023, 1, 2, 7), sleepDuration: 86_400)
+expect(upperLimit == date(2023, 1, 1, 7), "The duration limit is inclusive")
+
+calendar.timeZone = TimeZone(identifier: "America/New_York")!
+let springWake = date(2023, 3, 12, 7)
+let springBedtime = try BedtimeSchedule.bedtime(wakeUp: springWake, sleepDuration: 8 * 3_600)
+expect(springWake.timeIntervalSince(springBedtime) == 28_800, "Elapsed sleep is preserved at a DST boundary")
+expect(springBedtime == date(2023, 3, 11, 22), "Spring DST transition changes wall-clock subtraction")
+
 print("Passed \(checks) schedule checks")
