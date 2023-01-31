@@ -85,7 +85,7 @@ let prediction = try model.prediction(
 let bedtime = wakeUp - prediction.actualSleep
 ~~~
 
-Keeping the calculation close to the UI makes the learning example easy to follow. A larger application would move model loading and prediction behind a dedicated service and add unit tests around the time calculation.
+The view delegates inference to `BedtimeCalculator`, which reuses a successfully loaded model. `BedtimeSchedule` converts local wake times and subtracts the predicted duration, rejecting non-finite, non-positive, or over-24-hour outputs. Its calendar can be injected for deterministic checks.
 
 ## Project layout
 
@@ -94,27 +94,35 @@ BetterRest/
 ├── Assets.xcassets/
 ├── BetterRestApp.swift
 ├── ContentView.swift
+├── BedtimeCalculator.swift
+├── BedtimeSchedule.swift
+├── SleepPreferences.swift
 └── SleepCalculator.mlmodel
 ~~~
 
 ## Verification
 
-The checked-in model successfully generates its Swift interface with Apple’s <code>coremlc</code>, and the app sources type-check against the iOS Simulator SDK with Swift 6.2.
+Run `./scripts/verify.sh` on an Apple Silicon Mac with Xcode 15 or newer. It checks wake-time inputs, date and year boundaries, invalid predictions, and a daylight-saving transition. It also generates the model interface and type-checks all app sources against the iOS Simulator SDK. Temporary output stays in ignored `.build/`.
+
+These checks do not launch the app or measure model accuracy. Follow the setup steps above for a simulator run and a manual VoiceOver check.
 
 ## Scope and limitations
 
 - The app counts cups of coffee; it does not model caffeine strength, serving size, or consumption time.
 - The training dataset and Create ML training script are not included, so the model cannot be independently retrained or audited from this repository.
 - The recommendation is an educational prediction, not medical or sleep-health advice.
-- The current implementation keeps its state and model call in one view for clarity rather than using MVVM.
+- UI state stays in the view; model loading and time calculations use small dedicated helpers.
 
 ## Good next steps
 
 - Commit an Xcode project for one-click startup
 - Document the model’s training data and evaluation metrics
-- Add unit tests for midnight and date-boundary calculations
-- Add accessibility identifiers and UI tests
-- Cache the Core ML model rather than constructing it for each calculation
+- Add simulator UI tests using the included accessibility identifiers
+- Evaluate the model against a documented validation dataset
+
+## History note
+
+The 20 maintenance commits following `cc171ea` were prepared on 2026-10-29 with simulated author and committer dates on 20 selected days in January 2023. They are a retrospective Git-history exercise, not evidence that these changes were written in 2023. Earlier commits retain their original history.
 
 ## Showcase artwork
 
